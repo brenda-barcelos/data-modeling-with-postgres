@@ -19,7 +19,7 @@ create table dim_user (
 
 /* song in music db */
 create table dim_song( 
-    song_id int, 
+    song_id varchar, 
     title varchar, 
     artist_id varchar,
     year int, 
@@ -39,7 +39,7 @@ create table dim_artist(
 
 /* timestamps ofrecords in songplay broken down into specific units */
 create table dim_time( 
-    start_time int, 
+    start_time timestamp,
     hour int, 
     day int, 
     week int, 
@@ -52,8 +52,8 @@ create table dim_time(
 
 /* records in log data associated with song plays i.e. records */
 create table fac_songplay ( 
-    songplay_id int, 
-    start_time int, 
+    songplay_id serial,
+    start_time timestamp, 
     user_id int, 
     level varchar, 
     song_id int, 
@@ -62,4 +62,4 @@ create table fac_songplay (
     location varchar, 
     user_agent varchar
     --, constraint primary key pk_fac_songplay on (songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location)
-);
+
