@@ -85,13 +85,9 @@ def process_log_file(cur, filepath):
         songplay_data = (row['ts'], row['userId'], row['level'], songid, artistid, row['sessionId'], row['location'], row['userAgent'])
         cur.execute(songplay_table_insert, songplay_data)
 
-    # creating fks after inserting the data
-    # cur.execute(fk_user_songplay)
-    # cur.execute(fk_artist_songplay)
-    # cur.execute(fk_song_songplay)
-    # cur.execute(fk_time_songplay)
 
-def process_data(cur, conn, filepath, func):
+
+def process_data(cur, conn, filepath, func, func_fk):
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -106,19 +102,29 @@ def process_data(cur, conn, filepath, func):
     # iterate over files and process
     for i, datafile in enumerate(all_files, 1):
         func(cur, datafile)
-        conn.commit()
+        #conn.commit()
         print('{}/{} files processed.'.format(i, num_files))
 
+    #print(func_fk is None)
+    if func_fk is not None:
+        func_fk(cur)
+
+    conn.commit()
+
+def create_fks(cur):
+
+    # creating fks after inserting the data
+    cur.execute(fk_user_songplay)
+    cur.execute(fk_artist_songplay)
+    cur.execute(fk_song_songplay)
+    cur.execute(fk_time_songplay)
 
 def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
-    #rocess_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/song_data', func=process_song_file)
-    #rocess_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/log_data', func=process_log_file)
-
-    process_data(cur, conn, filepath='data/song_data', func=process_song_file)
-    process_data(cur, conn, filepath='data/log_data', func=process_log_file)
+    process_data(cur, conn, filepath='data/song_data', func=process_song_file, func_fk=None)
+    process_data(cur, conn, filepath='data/log_data', func=process_log_file, func_fk=create_fks)
     conn.close()
 
 

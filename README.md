@@ -56,3 +56,7 @@ Follow instructions in the `etl.ipynb` notebook to develop ETL processes for e
 #### **Build ETL Pipeline**
 
 Use what you've completed in `etl.ipynb` to complete `etl.py`, where you'll process the entire datasets. Remember to run `create_tables.py` before running `etl.py` to reset your tables. Run `test.ipynb` to confirm your records were successfully inserted into each table.
+
+
+## Running this project
+`python3 create_tables.py && python3 etl.py`
