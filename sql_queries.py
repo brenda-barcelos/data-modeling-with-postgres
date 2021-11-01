@@ -10,61 +10,61 @@ time_table_drop = "drop table if exists dw.dim_time;"
 
 songplay_table_create = ("""
 create table dw.fac_songplay ( 
-    songplay_id serial, 
-    start_time timestamp,
-    user_id int, 
-    level varchar, 
-    song_id varchar, 
-    artist_id varchar, 
-    session_id int, 
-    location varchar, 
-    user_agent varchar, 
+    songplay_id     serial      not null, 
+    start_time      timestamp   not null,
+    user_id         int         not null, 
+    level           varchar     not null, 
+    song_id         varchar         null, 
+    artist_id       varchar         null, 
+    session_id      int         not null, 
+    location        varchar     not null, 
+    user_agent      varchar     not null, 
     constraint pk_fac_songplay primary key (songplay_id)
 );
 """)
 
 user_table_create = ("""
 create table dw.dim_user (
-    user_id int, 
-    first_name varchar, 
-    last_name varchar, 
-    gender varchar, 
-    level varchar,
+    user_id     int     not null, 
+    first_name  varchar not null, 
+    last_name   varchar not null, 
+    gender      varchar not null, 
+    level       varchar not null,
     constraint pk_dim_user primary key (user_id)
 );
 """)
 
 song_table_create = ("""
 create table dw.dim_song( 
-    song_id varchar, 
-    title varchar, 
-    artist_id varchar,
-    year int, 
-    duration numeric,
+    song_id     varchar     not null, 
+    title       varchar     not null, 
+    artist_id   varchar     not null,
+    year        int         not null, 
+    duration    numeric     not null,
     constraint pk_dim_song primary key (song_id)
 );
 """)
 
 artist_table_create = ("""
 create table dw.dim_artist( 
-    artist_id varchar, 
-    name varchar, 
-    location varchar, 
-    latitude numeric, 
-    longitude numeric,
+    artist_id   varchar     not null, 
+    name        varchar     not null, 
+    location    varchar         null, 
+    latitude    numeric         null, 
+    longitude   numeric         null,
     constraint pk_dim_artist primary key (artist_id)
 );
 """)
 
 time_table_create = ("""
 create table dw.dim_time( 
-    start_time timestamp,
-    hour int, 
-    day int, 
-    week int, 
-    month int, 
-    year int,
-    weekday int, -- 1 a 7
+    start_time timestamp    not null,
+    hour int                not null, 
+    day int                 not null, 
+    week int                not null, 
+    month int               not null, 
+    year int                not null,
+    weekday int             not null, /* 0 - 7 */
     constraint pk_dim_time primary key (start_time)
 );
 """)
@@ -78,17 +78,23 @@ songplay_table_insert = (""" insert into dw.fac_songplay (start_time, user_id, l
 
 user_table_insert = (""" insert into dw.dim_user (user_id, first_name, last_name, gender, level)
                              values (%s, %s, %s, %s, %s)
-                             on conflict on constraint pk_dim_user do nothing;
+                             on conflict on constraint pk_dim_user do update
+                             set (first_name, last_name, gender, level) = (excluded.first_name, excluded.last_name, excluded.gender, excluded.level)
+                             ;
 """)
 
 song_table_insert = (""" insert into dw.dim_song (song_id, title, artist_id, year, duration)
                              values (%s, %s, %s, %s, %s)
-                             on conflict on constraint pk_dim_song do nothing;
+                             on conflict on constraint pk_dim_song do update
+                             set (title, artist_id, year, duration) = (excluded.title, excluded.artist_id, excluded.year, excluded.duration)
+                             ;
 """)
 
 artist_table_insert = (""" insert into dw.dim_artist (artist_id, name, location, latitude, longitude)
                              values (%s, %s, %s, %s, %s)
-                             on conflict on constraint pk_dim_artist do nothing;
+                             on conflict on constraint pk_dim_artist do update
+                             set (name, location, latitude, longitude) = (excluded.name, excluded.location, excluded.latitude, excluded.longitude)
+                             ;
 """)
 
 
