@@ -10,7 +10,7 @@ To complete the project, you will need to define fact and dimension tables for a
 
 ### Data Set
 
-![img]('doc/sparkify_dw_model.png')
+![img](doc/sparkify_dw_model.png)
 
 
 **Fact Table**
