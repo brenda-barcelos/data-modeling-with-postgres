@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.3" use-changelog="false" last-position="0,0" last-zoom="1" max-obj-count="6"
+	 default-schema="public" default-owner="postgres">
+<role name="student"
+      superuser="true"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="sparkifydb" encoding="UTF8" lc-collate="pt_BR.UTF-8" lc-ctype="pt_BR.UTF-8" is-template="false" allow-conns="true">
+	<role name="student"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="dw" layer="0" rect-visible="true" fill-color="#ff4980">
+	<role name="student"/>
+</schema>
+
+<table name="fac_songplay" layer="0" collapse-mode="2" max-obj-count="10" z-value="0">
+	<schema name="dw"/>
+	<role name="student"/>
+	<position x="820" y="460"/>
+	<column name="songplay_id" not-null="true" default-value="nextval('fac_songplay_songplay_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="start_time">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="user_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="level">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="song_id">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="artist_id">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="session_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="location">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="user_agent">
+		<type name="character varying" length="0"/>
+	</column>
+	<constraint name="pk_fac_songplay" type="pk-constr" table="dw.fac_songplay">
+		<columns names="songplay_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="fac_songplay_songplay_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="dw"/>
+	<role name="student"/>
+</sequence>
+
+<table name="dim_user" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="dw"/>
+	<role name="student"/>
+	<position x="400" y="500"/>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="first_name">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="last_name">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="gender">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="level">
+		<type name="character varying" length="0"/>
+	</column>
+	<constraint name="pk_dim_user" type="pk-constr" table="dw.dim_user">
+		<columns names="user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_song" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="dw"/>
+	<role name="student"/>
+	<position x="540" y="160"/>
+	<column name="song_id" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="title">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="artist_id">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="year">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="duration">
+		<type name="numeric" length="0"/>
+	</column>
+	<constraint name="pk_dim_song" type="pk-constr" table="dw.dim_song">
+		<columns names="song_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_artist" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="dw"/>
+	<role name="student"/>
+	<position x="1120" y="160"/>
+	<column name="artist_id" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="location">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="latitude">
+		<type name="numeric" length="0"/>
+	</column>
+	<column name="longitude">
+		<type name="numeric" length="0"/>
+	</column>
+	<constraint name="pk_dim_artist" type="pk-constr" table="dw.dim_artist">
+		<columns names="artist_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="dim_time" layer="0" collapse-mode="2" max-obj-count="8" z-value="0">
+	<schema name="dw"/>
+	<role name="student"/>
+	<position x="1300" y="460"/>
+	<column name="start_time" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="hour">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="day">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="week">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="month">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="year">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="weekday">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="pk_dim_time" type="pk-constr" table="dw.dim_time">
+		<columns names="start_time" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="fk_user_songplay_01" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="dw.dim_user" table="dw.fac_songplay">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_artist_songplay_01" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="dw.dim_artist" table="dw.fac_songplay">
+	<columns names="artist_id" ref-type="src-columns"/>
+	<columns names="artist_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_song_songplay_01" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="dw.dim_song" table="dw.fac_songplay">
+	<columns names="song_id" ref-type="src-columns"/>
+	<columns names="song_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_time_songplay_01" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="dw.dim_time" table="dw.fac_songplay">
+	<columns names="start_time" ref-type="src-columns"/>
+	<columns names="start_time" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="fk_user_songplay" type="relfk" layer="0"
+	 custom-color="#492159"
+	 src-table="dw.fac_songplay"
+	 dst-table="dw.dim_user" reference-fk="fk_user_songplay_01"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="35.0115" y="-70.4421"/>
+	</label>
+</relationship>
+
+<relationship name="fk_artist_songplay" type="relfk" layer="0"
+	 custom-color="#6376f2"
+	 src-table="dw.fac_songplay"
+	 dst-table="dw.dim_artist" reference-fk="fk_artist_songplay_01"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="3.90326" y="0.767736"/>
+	</label>
+</relationship>
+
+<relationship name="fk_song_songplay" type="relfk" layer="0"
+	 custom-color="#2100d6"
+	 src-table="dw.fac_songplay"
+	 dst-table="dw.dim_song" reference-fk="fk_song_songplay_01"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="90.9596" y="0.767736"/>
+	</label>
+</relationship>
+
+<relationship name="fk_time_songplay" type="relfk" layer="0"
+	 custom-color="#21b6cf"
+	 src-table="dw.fac_songplay"
+	 dst-table="dw.dim_time" reference-fk="fk_time_songplay_01"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="9.35654" y="1.06329"/>
+	</label>
+</relationship>
+
+</dbmodel>

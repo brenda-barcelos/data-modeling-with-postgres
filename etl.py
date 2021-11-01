@@ -58,6 +58,8 @@ def process_log_file(cur, filepath):
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
+    
+
 
     # load user table
     user_df = df[['userId','firstName','lastName','gender','level']]
@@ -83,6 +85,11 @@ def process_log_file(cur, filepath):
         songplay_data = (row['ts'], row['userId'], row['level'], songid, artistid, row['sessionId'], row['location'], row['userAgent'])
         cur.execute(songplay_table_insert, songplay_data)
 
+    # creating fks after inserting the data
+    # cur.execute(fk_user_songplay)
+    # cur.execute(fk_artist_songplay)
+    # cur.execute(fk_song_songplay)
+    # cur.execute(fk_time_songplay)
 
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
@@ -104,14 +111,14 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
-    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=brenda password=2021")
+    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
-    process_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/song_data', func=process_song_file)
-    process_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/log_data', func=process_log_file)
+    #rocess_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/song_data', func=process_song_file)
+    #rocess_data(cur, conn, filepath='/home/brenda/Udacity/data-modeling-with-postgres/data/log_data', func=process_log_file)
 
-    #process_data(cur, conn, filepath='data/song_data', func=process_song_file)
-    #process_data(cur, conn, filepath='data/log_data', func=process_log_file)
+    process_data(cur, conn, filepath='data/song_data', func=process_song_file)
+    process_data(cur, conn, filepath='data/log_data', func=process_log_file)
     conn.close()
 
 

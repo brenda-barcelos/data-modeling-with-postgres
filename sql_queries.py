@@ -1,15 +1,15 @@
 # DROP TABLES
 
-songplay_table_drop = "drop table if exists fac_songplay;"
-user_table_drop = "drop table if exists dim_user;"
-song_table_drop = "drop table if exists dim_song;"
-artist_table_drop = "drop table if exists dim_artist;"
-time_table_drop = "drop table if exists dim_time;"
+songplay_table_drop = "drop table if exists dw.fac_songplay;"
+user_table_drop = "drop table if exists dw.dim_user;"
+song_table_drop = "drop table if exists dw.dim_song;"
+artist_table_drop = "drop table if exists dw.dim_artist;"
+time_table_drop = "drop table if exists dw.dim_time;"
 
 # CREATE TABLES
 
 songplay_table_create = ("""
-create table fac_songplay ( 
+create table dw.fac_songplay ( 
     songplay_id serial, 
     start_time timestamp,
     user_id int, 
@@ -24,7 +24,7 @@ create table fac_songplay (
 """)
 
 user_table_create = ("""
-create table dim_user (
+create table dw.dim_user (
     user_id int, 
     first_name varchar, 
     last_name varchar, 
@@ -35,7 +35,7 @@ create table dim_user (
 """)
 
 song_table_create = ("""
-create table dim_song( 
+create table dw.dim_song( 
     song_id varchar, 
     title varchar, 
     artist_id varchar,
@@ -46,7 +46,7 @@ create table dim_song(
 """)
 
 artist_table_create = ("""
-create table dim_artist( 
+create table dw.dim_artist( 
     artist_id varchar, 
     name varchar, 
     location varchar, 
@@ -57,7 +57,7 @@ create table dim_artist(
 """)
 
 time_table_create = ("""
-create table dim_time( 
+create table dw.dim_time( 
     start_time timestamp,
     hour int, 
     day int, 
@@ -71,28 +71,28 @@ create table dim_time(
 
 # INSERT RECORDS
 
-songplay_table_insert = (""" insert into fac_songplay (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
+songplay_table_insert = (""" insert into dw.fac_songplay (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
                              values ( %s, %s, %s, %s, %s, %s, %s, %s)
                              on conflict on constraint pk_fac_songplay do nothing;
 """)
 
-user_table_insert = (""" insert into dim_user (user_id, first_name, last_name, gender, level)
+user_table_insert = (""" insert into dw.dim_user (user_id, first_name, last_name, gender, level)
                              values (%s, %s, %s, %s, %s)
                              on conflict on constraint pk_dim_user do nothing;
 """)
 
-song_table_insert = (""" insert into dim_song (song_id, title, artist_id, year, duration)
+song_table_insert = (""" insert into dw.dim_song (song_id, title, artist_id, year, duration)
                              values (%s, %s, %s, %s, %s)
                              on conflict on constraint pk_dim_song do nothing;
 """)
 
-artist_table_insert = (""" insert into dim_artist (artist_id, name, location, latitude, longitude)
+artist_table_insert = (""" insert into dw.dim_artist (artist_id, name, location, latitude, longitude)
                              values (%s, %s, %s, %s, %s)
                              on conflict on constraint pk_dim_artist do nothing;
 """)
 
 
-time_table_insert = (""" insert into dim_time (start_time, hour, day, week, month, year, weekday)
+time_table_insert = (""" insert into dw.dim_time (start_time, hour, day, week, month, year, weekday)
                              values (%s, %s, %s, %s, %s, %s, %s)
                              on conflict on constraint pk_dim_time do nothing;
 """)
@@ -100,8 +100,8 @@ time_table_insert = (""" insert into dim_time (start_time, hour, day, week, mont
 # FIND SONGS
 
 song_select = ("""  select song_id, artist_id 
-                    from dim_song
-                    join dim_artist using (artist_id)
+                    from dw.dim_song
+                    join dw.dim_artist using (artist_id)
                     where title = %s 
                       and name = %s
                       and duration = %s;
@@ -109,23 +109,23 @@ song_select = ("""  select song_id, artist_id
 
 # FOREIGN KEYS
 fk_artist_songplay = ("""
-alter table fac_songplay add constraint fk_artist_songplay_01 foreign key(artist_id)
-references dim_artist (artist_id) match simple on update cascade;
+alter table dw.fac_songplay add constraint fk_artist_songplay_01 foreign key(artist_id)
+references dw.dim_artist (artist_id) match simple on update cascade;
 """)
 
 fk_song_songplay = ("""
-alter table fac_songplay add constraint fk_song_songplay_01 foreign key(song_id)
-references dim_song (song_id) match simple on update cascade;
+alter table dw.fac_songplay add constraint fk_song_songplay_01 foreign key(song_id)
+references dw.dim_song (song_id) match simple on update cascade;
 """)
 
 fk_user_songplay = ("""
-alter table fac_songplay add constraint fk_user_songplay_01 foreign key(user_id)
-references dim_user (user_id) match simple on update cascade;
+alter table dw.fac_songplay add constraint fk_user_songplay_01 foreign key(user_id)
+references dw.dim_user (user_id) match simple on update cascade;
 """)
 
 fk_time_songplay = ("""
-alter table fac_songplay add constraint fk_time_songplay_01 foreign key(start_time)
-references dim_time (start_time) match simple on update cascade;
+alter table dw.fac_songplay add constraint fk_time_songplay_01 foreign key(start_time)
+references dw.dim_time (start_time) match simple on update cascade;
 """)
 
 # QUERY LISTS
