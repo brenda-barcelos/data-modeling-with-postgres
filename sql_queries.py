@@ -6,10 +6,10 @@ song_table_drop = "drop table if exists dw.dim_song;"
 artist_table_drop = "drop table if exists dw.dim_artist;"
 time_table_drop = "drop table if exists dw.dim_time;"
 
-# CREATE TABLES
+# create table if not existsS
 
 songplay_table_create = ("""
-create table dw.fac_songplay ( 
+create table if not exists dw.fac_songplay ( 
     songplay_id     serial      not null, 
     start_time      timestamp   not null,
     user_id         int         not null, 
@@ -24,7 +24,7 @@ create table dw.fac_songplay (
 """)
 
 user_table_create = ("""
-create table dw.dim_user (
+create table if not exists dw.dim_user (
     user_id     int     not null, 
     first_name  varchar not null, 
     last_name   varchar not null, 
@@ -35,7 +35,7 @@ create table dw.dim_user (
 """)
 
 song_table_create = ("""
-create table dw.dim_song( 
+create table if not exists dw.dim_song( 
     song_id     varchar     not null, 
     title       varchar     not null, 
     artist_id   varchar     not null,
@@ -46,7 +46,7 @@ create table dw.dim_song(
 """)
 
 artist_table_create = ("""
-create table dw.dim_artist( 
+create table if not exists dw.dim_artist( 
     artist_id   varchar     not null, 
     name        varchar     not null, 
     location    varchar         null, 
@@ -57,7 +57,7 @@ create table dw.dim_artist(
 """)
 
 time_table_create = ("""
-create table dw.dim_time( 
+create table if not exists dw.dim_time( 
     start_time timestamp    not null,
     hour int                not null, 
     day int                 not null, 
