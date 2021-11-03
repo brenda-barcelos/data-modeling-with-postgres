@@ -1,0 +1,10 @@
+*.log
+*.pyc
+*.swp
+*.tmp
+*~ 
+*~.nib
+.metadata
+.project
+~$*
+__pycache__/*
